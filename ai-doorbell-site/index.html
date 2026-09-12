@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en" class="light-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTINEL | Autonomous AI Smart Doorbell</title>
+    <meta name="description" content="SENTINEL is the world's most advanced AI smart doorbell with 3D biometric recognition, instant silent phone notifications, and ultra-precision optics.">
+    <meta name="theme-color" content="#ffffff">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Three.js & GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+</head>
+<body>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FULLSCREEN 3D CANVAS                        -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="canvas-container">
+        <canvas id="webgl-canvas"></canvas>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- PRELOADER                                   -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="preloader">
+        <div class="preloader-content">
+            <div class="preloader-brand">
+                <div class="brand-ring"></div>
+                <span class="brand-name">SENTINEL</span>
+            </div>
+            <div class="preloader-bar-wrap">
+                <div class="preloader-bar" id="preloader-bar"></div>
+            </div>
+            <div class="preloader-meta">
+                <span id="preloader-status">Loading 3D Optic Engine...</span>
+                <span id="preloader-percent">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- CUSTOM CURSOR                               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <div id="cursor" class="custom-cursor"></div>
+    <div id="cursor-follower" class="cursor-follower"></div>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- NAVIGATION                                  -->
+    <!-- ═══════════════════════════════════════════ -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-brand">
+                <div class="brand-logo-symbol">
+                    <div class="symbol-core"></div>
+                </div>
+                <span class="brand-title">SENTINEL</span>
+            </a>
+            
+            <div class="nav-menu">
+                <a href="#hero" class="nav-item">Overview</a>
+                <a href="#features" class="nav-item">Optics</a>
+                <a href="#recognition" class="nav-item">Biometrics</a>
+                <a href="#mobile-app" class="nav-item">App</a>
+                <a href="#specs" class="nav-item">Specs</a>
+            </div>
+
+            <div class="nav-actions">
+                <a href="#preorder" class="btn-nav-buy">
+                    <span>Reserve Unit</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- MAIN CONTENT SCROLL CONTAINER               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <main id="main-content">
+
+        <!-- SECTION 1: HERO -->
+        <section id="hero" class="section hero-section">
+            <div class="container hero-container">
+                <div class="hero-text-block">
+                    <div class="hero-pill-tag">
+                        <span class="tag-dot"></span>
+                        <span>NEXT-GEN AUTONOMOUS SECURITY</span>
+                    </div>
+
+                    <h1 class="hero-heading">
+                        <span class="heading-line">The Smart Doorbell</span>
+                        <span class="heading-line gradient-text">Reinvented.</span>
+                    </h1>
+
+                    <p class="hero-description">
+                        Instant 3D biometric recognition, zero-latency cloud alerts, and neural edge processing. Knows every face before they take a step.
+                    </p>
+
+                    <div class="hero-btn-group">
+                        <a href="#preorder" class="btn-primary-white">
+                            <span>Pre-Order $249</span>
+                            <div class="btn-arrow">→</div>
+                        </a>
+                        <button id="trigger-scan-btn" class="btn-secondary-white">
+                            <span class="icon-scan">⚡</span>
+                            <span>Simulate Scan</span>
+                        </button>
+                    </div>
+
+                    <div class="hero-metrics-row">
+                        <div class="metric-box">
+                            <span class="metric-val counter" data-target="99.9">0</span><span class="metric-unit">%</span>
+                            <span class="metric-lbl">Biometric Accuracy</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-box">
+                            <span class="metric-val counter" data-target="0.15">0</span><span class="metric-unit">s</span>
+                            <span class="metric-lbl">Neural Response</span>
+                        </div>
+                        <div class="metric-divider"></div>
+                        <div class="metric-box">
+                            <span class="metric-val">4K</span><span class="metric-unit">HDR</span>
+                            <span class="metric-lbl">Sony Sensor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-prompt">
+                <div class="scroll-line-fill"></div>
+                <span>SCROLL TO EXPLORE 3D CAMERA</span>
+            </div>
+        </section>
+
+        <!-- SECTION 2: ROTATING LENS / OPTICS -->
+        <section id="features" class="section optics-section">
+            <div class="container">
+                <div class="section-intro">
+                    <span class="pill-label">PRECISION HARDWARE</span>
+                    <h2 class="section-heading">Architected to <span class="gradient-text">outperstrip.</span></h2>
+                    <p class="section-sub">Scroll to rotate camera & explore every millimeter of engineering.</p>
+                </div>
+
+                <div class="optics-grid">
+                    <div class="glass-card feature-card-white">
+                        <div class="card-num">01</div>
+                        <div class="card-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <circle cx="12" cy="12" r="4"/>
+                                <line x1="21.17" y1="8" x2="12" y2="8"/>
+                                <line x1="3.95" y1="6.06" x2="8.54" y2="14"/>
+                                <line x1="10.88" y1="21.94" x2="15.46" y2="14"/>
+                            </svg>
+                        </div>
+                        <h3>Custom F/1.4 Glass Optic</h3>
+                        <p>7-element sapphire glass array eliminates distortion while maximizing low-light light gathering power.</p>
+                    </div>
+
+                    <div class="glass-card feature-card-white">
+                        <div class="card-num">02</div>
+                        <div class="card-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="4" y="4" width="16" height="16" rx="2"/>
+                                <rect x="9" y="9" width="6" height="6"/>
+                                <line x1="9" y1="1" x2="9" y2="4"/>
+                                <line x1="15" y1="1" x2="15" y2="4"/>
+                                <line x1="9" y1="20" x2="9" y2="23"/>
+                                <line x1="15" y1="20" x2="15" y2="23"/>
+                            </svg>
+                        </div>
+                        <h3>Dual-Core NPU Engine</h3>
+                        <p>On-device neural processing engine evaluates 128 facial feature vectors strictly locally for 100% privacy.</p>
+                    </div>
+
+                    <div class="glass-card feature-card-white">
+                        <div class="card-num">03</div>
+                        <div class="card-icon">
+                            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3>IP68 Aerospace Housing</h3>
+                        <p>Anodized aluminum alloy body designed to withstand extreme thermal conditions from -40°C to +70°C.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: BIOMETRIC FACE RECOGNITION -->
+        <section id="recognition" class="section bio-section">
+            <div class="container bio-container">
+                <div class="bio-hud-panel glass-panel">
+                    <div class="hud-header">
+                        <div class="hud-live-dot"></div>
+                        <span>LIVE BIOMETRIC FEED</span>
+                        <span class="hud-time" id="hud-time">14:32:00 UTC</span>
+                    </div>
+
+                    <div class="hud-viewport">
+                        <div class="target-reticle"></div>
+                        <div class="hud-grid-overlay"></div>
+                        
+                        <div class="scanner-data-box" id="scanner-data-box">
+                            <div class="data-row">
+                                <span class="lbl">VISITOR</span>
+                                <span class="val" id="hud-name">Scanning...</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="lbl">MATCH ACCURACY</span>
+                                <span class="val accent-color" id="hud-score">-- %</span>
+                            </div>
+                            <div class="data-row">
+                                <span class="lbl">IDENTITY KEY</span>
+                                <span class="val mono" id="hud-key">0x8F9A...C41</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hud-footer">
+                        <div class="hud-status-chip">
+                            <span class="chip-dot"></span>
+                            <span id="hud-status-text">NEURAL NETWORK ACTIVE</span>
+                        </div>
+                        <button id="hud-trigger-btn" class="btn-hud-scan">
+                            <span>Run Biometric Scan</span>
+                            <span class="icon-flash">⚡</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bio-content-text">
+                    <span class="pill-label">AI FACIAL ENGINE</span>
+                    <h2 class="section-heading">Instant recognition.<br><span class="gradient-text">Zero doubt.</span></h2>
+                    <p class="section-sub">
+                        SENTINEL identifies family, friends, and trusted delivery personnel instantly. Unrecognized faces trigger silent high-definition image push notifications directly to your device screen.
+                    </p>
+
+                    <div class="bio-check-list">
+                        <div class="check-item">
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <strong>Sub-Second Match Speed</strong>
+                                <p>Identifies registered individuals in under 150 milliseconds.</p>
+                            </div>
+                        </div>
+                        <div class="check-item">
+                            <div class="check-icon">✓</div>
+                            <div>
+                                <strong>Anti-Spoofing Depth Sensor</strong>
+                                <p>Infrared 3D dot projection blocks printed photo or screen spoofing attempts.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: MOBILE APP & NOTIFICATION PUSH -->
+        <section id="mobile-app" class="section mobile-section">
+            <div class="container mobile-container">
+                <div class="mobile-text">
+                    <span class="pill-label">SILENT SMART ALERTS</span>
+                    <h2 class="section-heading">Your phone notified,<br><span class="gradient-text">instantly & beautifully.</span></h2>
+                    <p class="section-sub">
+                        Receive crystal-clear portrait snapshots directly on your lock screen with zero noise or invasive audio popups. Touch to open live 4K stream or unlock door.
+                    </p>
+                </div>
+
+                <div class="iphone-mockup-wrap">
+                    <div class="iphone-body">
+                        <div class="iphone-island"></div>
+                        <div class="iphone-screen">
+                            <div class="lock-screen-header">
+                                <span class="time-big">09:41</span>
+                                <span class="date-sub">Thursday, September 12</span>
+                            </div>
+
+                            <div class="notification-card-white" id="demo-notification">
+                                <div class="notif-top">
+                                    <div class="notif-app-icon">
+                                        <div class="dot-inner"></div>
+                                    </div>
+                                    <span class="notif-app-name">SENTINEL</span>
+                                    <span class="notif-time-ago">just now</span>
+                                </div>
+                                <div class="notif-main-content">
+                                    <div class="notif-user-avatar">
+                                        <div class="avatar-ring"></div>
+                                    </div>
+                                    <div class="notif-details">
+                                        <h4 class="notif-user-name" id="notif-person-name">Sarah Johnson</h4>
+                                        <p class="notif-subtext">Arrived at Front Entrance</p>
+                                    </div>
+                                </div>
+                                <div class="notif-quick-actions">
+                                    <button class="btn-notif-action">View 4K</button>
+                                    <button class="btn-notif-action primary">Unlock Door</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: HOW IT WORKS EXPLODED 3D VIEW -->
+        <section id="how-it-works" class="section timeline-section">
+            <div class="container">
+                <div class="section-intro center">
+                    <span class="pill-label">FOUR-STAGE PROTECTION</span>
+                    <h2 class="section-heading">From approach to entry.</h2>
+                </div>
+
+                <div class="timeline-steps-grid">
+                    <div class="step-card-white">
+                        <div class="step-badge">STAGE 01</div>
+                        <h3>Proximity Radar</h3>
+                        <p>Ultra-wideband radar detects motion within a 7-meter radius and warms up the AI optic sensor.</p>
+                    </div>
+
+                    <div class="step-card-white">
+                        <div class="step-badge">STAGE 02</div>
+                        <h3>3D Face Mesh Scan</h3>
+                        <p>Infrared projection projects 30,000 invisible dots to map facial geometry in 3D.</p>
+                    </div>
+
+                    <div class="step-card-white">
+                        <div class="step-badge">STAGE 03</div>
+                        <h3>Edge Encryption</h3>
+                        <p>Neural engine matches biometric vectors against stored local encryption keys.</p>
+                    </div>
+
+                    <div class="step-card-white">
+                        <div class="step-badge">STAGE 04</div>
+                        <h3>Silent Photo Push</h3>
+                        <p>Crisp snapshot delivered directly to your device lockscreen without intrusive sound.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: TECHNICAL SPECS -->
+        <section id="specs" class="section specs-section">
+            <div class="container">
+                <div class="section-intro center">
+                    <span class="pill-label">SPECIFICATIONS</span>
+                    <h2 class="section-heading">Engineered without compromise.</h2>
+                </div>
+
+                <div class="specs-grid-white">
+                    <div class="spec-tile">
+                        <div class="tile-val">4K</div>
+                        <div class="tile-title">HDR Video Sensor</div>
+                        <div class="tile-desc">Sony Starvis 2 sensor with 160° ultra-wide field of view</div>
+                    </div>
+
+                    <div class="spec-tile">
+                        <div class="tile-val">8 TOPS</div>
+                        <div class="tile-title">AI Processing</div>
+                        <div class="tile-desc">Dual NPU core handling on-device biometric neural nets</div>
+                    </div>
+
+                    <div class="spec-tile">
+                        <div class="tile-val">WiFi 6</div>
+                        <div class="tile-title">Tri-Band Wireless</div>
+                        <div class="tile-desc">Sub-GHz radio, Bluetooth 5.3, and ultra-wideband link</div>
+                    </div>
+
+                    <div class="spec-tile">
+                        <div class="tile-val">1 Year</div>
+                        <div class="tile-title">Battery Reserve</div>
+                        <div class="tile-desc">10,000mAh solid-state battery with optional solar plate</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 7: PRE-ORDER CTA -->
+        <section id="preorder" class="section cta-section">
+            <div class="container">
+                <div class="cta-box-white">
+                    <span class="pill-label">LIMITED FIRST EDITION</span>
+                    <h2 class="cta-title">Upgrade your entrance to <span class="gradient-text">SENTINEL.</span></h2>
+                    <p class="cta-sub">Reserve today to secure first batch delivery with complimentary lifetime cloud storage.</p>
+                    
+                    <div class="cta-pricing-row">
+                        <span class="price-old">$349</span>
+                        <span class="price-now">$249</span>
+                        <span class="price-tag">LAUNCH SAVINGS</span>
+                    </div>
+
+                    <a href="#" class="btn-primary-large">
+                        <span>Reserve SENTINEL Now</span>
+                        <span class="btn-arrow-right">→</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer-white">
+            <div class="container footer-inner">
+                <div class="footer-left">
+                    <div class="brand-title">SENTINEL</div>
+                    <p>© 2026 SENTINEL Inc. All rights reserved. Next-Generation Autonomous Door Security.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Security</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Main JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>
