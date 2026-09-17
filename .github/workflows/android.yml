@@ -20,16 +20,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
           cache: 'gradle'
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Fix line endings and grant execute permissions
+        run: |
+          sed -i 's/\r$//' gradlew
+          chmod +x gradlew
 
-      - name: Build Debug APK
+      - name: Build Debug APK with Gradle
         run: ./gradlew assembleDebug --stacktrace
 
       - name: Upload APK to GitHub Artifacts
