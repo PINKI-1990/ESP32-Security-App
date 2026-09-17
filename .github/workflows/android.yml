@@ -26,14 +26,21 @@ jobs:
           distribution: 'temurin'
           cache: 'gradle'
 
+      - name: Accept Android SDK Licenses
+        run: |
+          mkdir -p "$ANDROID_HOME/licenses"
+          echo -e "\n243337357736baf76e6f1f374084b8007678d999\n504667f4c005805f7267d5070267358f93f6f5f1\n84831b9409646a918e30573bab4c9c91346d8abd\n793b519285758c5b721d35d59c3111072b3c61c4\nd9354457456704e1c0e3c73d21f4395b6a47bc35\ne6756712b0514907313239c4c71d66185ec2088a\n8a51a612869d10841c2007268d9b207a6102247b" > "$ANDROID_HOME/licenses/android-sdk-license"
+          echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace --info
+        run: ./gradlew assembleDebug --stacktrace --info > build.log 2>&1 || (cat build.log | tail -n 200 && exit 1)
 
       - name: Upload APK to GitHub Artifacts
         uses: actions/upload-artifact@v4
+        if: success()
         with:
           name: ESP32-SecurityApp-APK
           path: app/build/outputs/apk/debug/app-debug.apk
